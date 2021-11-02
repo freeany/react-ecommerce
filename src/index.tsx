@@ -1,8 +1,18 @@
 import ReactDOM from 'react-dom'
-// import App from './App'
+import { Provider } from 'react-redux'
+import { ConnectedRouter } from 'connected-react-router'
+import { history } from './store'
+// import { API } from './config'
 import Routes from './Routes'
+import store from './store'
 
-import { API } from './config'
-console.log(API)
+import './style.css'
 
-ReactDOM.render(<Routes />, document.getElementById('root'))
+ReactDOM.render(
+	<Provider store={store}>
+		<ConnectedRouter history={history}>
+			<Routes />
+		</ConnectedRouter>
+	</Provider>,
+	document.getElementById('root')
+)

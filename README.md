@@ -1,46 +1,93 @@
-# Getting Started with Create React App
+## 客户端开发环境
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. `npx create-react-app ecommerce-front --template typescript`
 
-## Available Scripts
+2. 安装项目中所需要使用的依赖
 
-In the project directory, you can run:
+   ```js
+   npm install antd axios moment redux react-redux react-router-dom redux-saga connected-react-router redux-devtools-extension @types/react-redux @types/react-router-dom
+   ```
 
-### `npm start`
+3. antd css 使用cdn
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+4. 配置服务的请求api地址 .env环境变量文件中
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   ```js
+   REACT_APP_PRODUCTION_API_URL=http://fullstack.net.cn/api
+   REACT_APP_DEVLOPMENT_API_URL=http://localhost/api
+   ```
 
-### `npm test`
+5. 添加config.ts 配置文件获取环境变量文件的 数据，统一导出
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```tsx
+   export let API: string
+   
+   if (process.env.NODE_ENV === "development") {
+     API = process.env.REACT_APP_DEVLOPMENT_API_URL!
+   } else {
+     API = process.env.REACT_APP_PRODUCTION_API_URL!
+   }
+   ```
 
-### `npm run build`
+6. 安装chrom扩展
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   1. React Developer Tools: 检查React组件层次结构，在页面上显示React组件。
+   2. Redux DevTools: 监测 Store 中状态的变化
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+7. 初始化路由
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   7.1 在src下新建`Routes.tsx`
 
-### `npm run eject`
+   ```react
+   <HashRouter>
+     <Switch>
+       <Route path="/" component={Home} exact></Route>
+       <Route path="/shop" component={Shop}></Route>
+     </Switch>
+   </HashRouter>
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   7.2  src/index.tsx中
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```react
+   ReactDOM.render(<Routes />, document.getElementById('root'))
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+8.  初始化store容器
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   8.1  store/index.ts
 
-## Learn More
+   ```js
+   import { createStore } from 'redux'
+   import { rootReducer } from './reducers'
+   
+   export default createStore(rootReducer)
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   8.2 store/reducers/index.ts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```js
+   import { combineReducers } from 'redux'
+   import testReducer from './test.reducer'
+   
+   export const rootReducer = combineReducers({
+   	test: testReducer
+   })
+   
+   export type RootState = ReturnType<typeof rootReducer>
+   ```
+
+   8.3 src/index.ts
+
+   ```js
+   import { Provider } from 'react-redux'
+   import store from './store'
+   ReactDOM.render(
+   	<Provider store={store}>
+   		<Routes />
+   	</Provider>,
+   	document.getElementById('root')
+   )
+   ```
+
+   
