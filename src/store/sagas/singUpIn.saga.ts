@@ -1,5 +1,5 @@
 import { takeEvery, put } from 'redux-saga/effects'
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import {
 	SIGNIN,
 	SignInActionInterface,
@@ -10,6 +10,7 @@ import {
 	signUpFailureAction,
 	signUpSuccessAction
 } from '../actions/signUpIn.actions'
+import { JWT } from '../models/user'
 import { API } from '../../config'
 
 interface axiosSignUpResponse {
@@ -32,7 +33,7 @@ function* handleSignUpAction(action: SignUpActionInterface) {
 
 function* handleSignInAction(action: SignInActionInterface) {
 	try {
-		const result: { data: {} } = yield axios.post(`${API}/signin`, action.payload)
+		const result: AxiosResponse<JWT> = yield axios.post(`${API}/signin`, action.payload)
 		localStorage.setItem('jwt', JSON.stringify(result.data))
 		yield put(signInSuccessAction())
 	} catch (err) {

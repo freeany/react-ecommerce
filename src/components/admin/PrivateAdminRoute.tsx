@@ -11,7 +11,7 @@ interface PrivateRouteProps extends RouteProps {
 }
 
 const PrivateAdminRoute: FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
-	// 必须要render
+	// render 代替了component属性。
 	return (
 		<Route
 			{...rest}
@@ -24,7 +24,6 @@ const PrivateAdminRoute: FC<PrivateRouteProps> = ({ component: Component, ...res
 					if (role === 1) {
 						return <Component {...props} />
 					} else {
-						console.log('???')
 						return <Redirect to="/signin" />
 					}
 				} else {

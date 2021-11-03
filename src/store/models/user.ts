@@ -1,3 +1,4 @@
+// 服务端相关数据
 export interface User {
 	_id: string
 	name: string

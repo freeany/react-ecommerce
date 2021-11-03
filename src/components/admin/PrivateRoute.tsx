@@ -10,7 +10,7 @@ interface PrivateRouteProps extends RouteProps {
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
-	// 必须要render
+	// render 代替了component属性。
 	return (
 		<Route
 			{...rest}
